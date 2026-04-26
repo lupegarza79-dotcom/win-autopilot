@@ -20,14 +20,22 @@ struct AlertsScreen: View {
                     }
                     .padding(.top, 8)
 
-                    sectionHeader("WHAT WIN KNOWS ABOUT YOU")
+                    HStack(spacing: 8) {
+                        sectionHeader("WHAT WIN KNOWS ABOUT YOU")
+                        Spacer()
+                        badge(text: "AI memory", color: ConsumerColors.retailBlue, bg: ConsumerColors.retailBlueSoft, border: ConsumerColors.retailBlueBorder)
+                    }
                     VStack(spacing: 10) {
-                        knowsRow(emoji: "🌮", text: "Tacos on Tuesdays at lunch")
-                        knowsRow(emoji: "☕", text: "Coffee on weekday mornings")
-                        knowsRow(emoji: "⛽", text: "Gas near home")
+                        knowsRow(category: .tacos, text: "Tacos on Tuesdays at lunch")
+                        knowsRow(category: .coffee, text: "Coffee on weekday mornings")
+                        knowsRow(category: .gas, text: "Gas near home")
                     }
 
-                    sectionHeader("WIN IS WATCHING FOR")
+                    HStack(spacing: 8) {
+                        sectionHeader("WIN IS WATCHING FOR")
+                        Spacer()
+                        badge(text: "Active alerts", color: ConsumerColors.green, bg: ConsumerColors.greenSoft, border: ConsumerColors.borderGreen)
+                    }
                     VStack(spacing: 10) {
                         ForEach(alerts) { alert in
                             AlertChip(alert: alert)
@@ -67,9 +75,26 @@ struct AlertsScreen: View {
             .foregroundStyle(ConsumerColors.textMuted)
     }
 
-    private func knowsRow(emoji: String, text: String) -> some View {
+    private func badge(text: String, color: Color, bg: Color, border: Color) -> some View {
+        Text(text)
+            .font(.system(size: 9, weight: .heavy))
+            .tracking(1.0)
+            .foregroundStyle(color)
+            .padding(.horizontal, 8)
+            .padding(.vertical, 4)
+            .background(Capsule().fill(bg))
+            .overlay(Capsule().strokeBorder(border, lineWidth: 1))
+    }
+
+    private func knowsRow(category: ConsumerCategory, text: String) -> some View {
         HStack(spacing: 12) {
-            Text(emoji).font(.system(size: 18))
+            ZStack {
+                Circle().fill(ConsumerColors.retailBlueSoft)
+                Image(systemName: category.symbolName)
+                    .font(.system(size: 14, weight: .bold))
+                    .foregroundStyle(ConsumerColors.retailBlue)
+            }
+            .frame(width: 34, height: 34)
             Text(text)
                 .font(.system(size: 14, weight: .medium))
                 .foregroundStyle(ConsumerColors.textDark)

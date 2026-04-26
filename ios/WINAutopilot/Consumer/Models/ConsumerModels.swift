@@ -19,6 +19,17 @@ nonisolated enum ConsumerCategory: String, Sendable, CaseIterable {
         case .carwash: return "🚿"
         }
     }
+
+    var symbolName: String {
+        switch self {
+        case .tacos: return "fork.knife"
+        case .coffee: return "cup.and.saucer.fill"
+        case .gas: return "fuelpump.fill"
+        case .haircut: return "scissors"
+        case .pizza: return "fork.knife.circle.fill"
+        case .carwash: return "car.fill"
+        }
+    }
 }
 
 nonisolated struct ConsumerOffer: Identifiable, Sendable, Equatable {
@@ -37,6 +48,7 @@ nonisolated struct ConsumerOffer: Identifiable, Sendable, Equatable {
     let matchReason: String
     let gradientStart: String
     let gradientEnd: String
+    let imageUrl: String
 }
 
 nonisolated struct PassSignal: Sendable {

@@ -29,4 +29,12 @@ enum ConsumerColors {
     static let textLight = Color.white
     static let textLightMid = Color.white.opacity(0.55)
     static let textLightMuted = Color.white.opacity(0.32)
+
+    static let aiBlue = Color(red: 0.0, green: 0.812, blue: 1.0)
+    static let aiBlueSoft = Color(red: 0.0, green: 0.812, blue: 1.0).opacity(0.12)
+    static let aiBlueBorder = Color(red: 0.0, green: 0.812, blue: 1.0).opacity(0.28)
+
+    static let retailBlue = Color(red: 0.0, green: 0.278, blue: 1.0)
+    static let retailBlueSoft = Color(red: 0.0, green: 0.278, blue: 1.0).opacity(0.10)
+    static let retailBlueBorder = Color(red: 0.0, green: 0.278, blue: 1.0).opacity(0.25)
 }

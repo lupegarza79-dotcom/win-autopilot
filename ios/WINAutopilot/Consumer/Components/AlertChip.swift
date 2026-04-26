@@ -5,10 +5,14 @@ struct AlertChip: View {
 
     var body: some View {
         HStack(spacing: 12) {
-            Text(alert.emoji)
-                .font(.system(size: 22))
-                .frame(width: 40, height: 40)
-                .background(Circle().fill(ConsumerColors.bgWarm))
+            ZStack {
+                Circle().fill(ConsumerColors.greenSoft)
+                Image(systemName: alert.category.symbolName)
+                    .font(.system(size: 15, weight: .bold))
+                    .foregroundStyle(ConsumerColors.green)
+            }
+            .frame(width: 34, height: 34)
+
             VStack(alignment: .leading, spacing: 2) {
                 Text(alert.label)
                     .font(.system(size: 15, weight: .semibold))

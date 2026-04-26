@@ -2,11 +2,12 @@ import SwiftUI
 
 struct AIContextLine: View {
     let text: String
+    var isScanning: Bool = false
 
     var body: some View {
         HStack(spacing: 8) {
             Circle()
-                .fill(ConsumerColors.green)
+                .fill(isScanning ? ConsumerColors.aiBlue : ConsumerColors.green)
                 .frame(width: 6, height: 6)
             Text(text)
                 .font(.system(size: 13, weight: .medium))
@@ -18,11 +19,11 @@ struct AIContextLine: View {
         .padding(.vertical, 10)
         .background(
             RoundedRectangle(cornerRadius: 14)
-                .fill(ConsumerColors.bgGreen)
+                .fill(isScanning ? ConsumerColors.aiBlueSoft : ConsumerColors.bgGreen)
         )
         .overlay(
             RoundedRectangle(cornerRadius: 14)
-                .strokeBorder(ConsumerColors.borderGreen, lineWidth: 1)
+                .strokeBorder(isScanning ? ConsumerColors.aiBlueBorder : ConsumerColors.borderGreen, lineWidth: 1)
         )
     }
 }

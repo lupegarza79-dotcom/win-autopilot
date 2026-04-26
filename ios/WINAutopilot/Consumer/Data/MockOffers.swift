@@ -17,7 +17,8 @@ enum MockOffers {
             matchScore: 98,
             matchReason: "You claimed tacos 4 Tuesdays in a row",
             gradientStart: "#061210",
-            gradientEnd: "#0C2018"
+            gradientEnd: "#0C2018",
+            imageUrl: "https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=900&q=80"
         ),
         ConsumerOffer(
             id: "o2",
@@ -34,7 +35,8 @@ enum MockOffers {
             matchScore: 91,
             matchReason: "You buy coffee here 3x a week",
             gradientStart: "#060A14",
-            gradientEnd: "#0A1428"
+            gradientEnd: "#0A1428",
+            imageUrl: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=900&q=80"
         ),
         ConsumerOffer(
             id: "o3",
@@ -49,9 +51,10 @@ enum MockOffers {
             countdownMinutes: 180,
             pin: "904731",
             matchScore: 84,
-            matchReason: "You fill up on Tuesdays near here",
+            matchReason: "You fill up on Tuesdays near this area",
             gradientStart: "#100A04",
-            gradientEnd: "#1A1008"
+            gradientEnd: "#1A1008",
+            imageUrl: "https://images.unsplash.com/photo-1542362567-b07e54358753?w=900&q=80"
         ),
         ConsumerOffer(
             id: "o4",
@@ -66,9 +69,10 @@ enum MockOffers {
             countdownMinutes: 22,
             pin: "157823",
             matchScore: 76,
-            matchReason: "You saved this last week",
+            matchReason: "You saved this category last week",
             gradientStart: "#0A0414",
-            gradientEnd: "#140820"
+            gradientEnd: "#140820",
+            imageUrl: "https://images.unsplash.com/photo-1585747860715-2ba37e788b70?w=900&q=80"
         ),
         ConsumerOffer(
             id: "o5",
@@ -82,17 +86,18 @@ enum MockOffers {
             spotsTotal: 20,
             countdownMinutes: 60,
             pin: "293847",
-            matchScore: 88,
-            matchReason: "You order pizza on Friday evenings",
+            matchScore: 92,
+            matchReason: "Pizza Night Friday",
             gradientStart: "#140614",
-            gradientEnd: "#200A20"
+            gradientEnd: "#200A20",
+            imageUrl: "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=900&q=80"
         ),
         ConsumerOffer(
             id: "o6",
             category: .carwash,
-            businessName: "XPress Car Wash",
+            businessName: "XPress Wash",
             dealText: "FREE Basic Wash",
-            shortDeal: "FREE Car Wash",
+            shortDeal: "FREE Wash",
             distance: "0.9 mi",
             walkTime: "~5 min drive",
             spotsLeft: 8,
@@ -100,15 +105,16 @@ enum MockOffers {
             countdownMinutes: 75,
             pin: "847291",
             matchScore: 85,
-            matchReason: "You wash your car every 2 weeks",
+            matchReason: "Bi-weekly wash routine",
             gradientStart: "#040C14",
-            gradientEnd: "#081828"
+            gradientEnd: "#081828",
+            imageUrl: "https://images.unsplash.com/photo-1520340356584-f9917d1eea6f?w=900&q=80"
         ),
         ConsumerOffer(
             id: "o7",
             category: .tacos,
-            businessName: "La Familia Grill",
-            dealText: "20% OFF Any Plate",
+            businessName: "La Familia",
+            dealText: "20% OFF Plates",
             shortDeal: "20% Plates",
             distance: "0.7 mi",
             walkTime: "~9 min walk",
@@ -116,27 +122,29 @@ enum MockOffers {
             spotsTotal: 30,
             countdownMinutes: 120,
             pin: "561738",
-            matchScore: 82,
-            matchReason: "You eat Mexican food 3x a week",
+            matchScore: 88,
+            matchReason: "Tuesday Taco Habit",
             gradientStart: "#0C1006",
-            gradientEnd: "#162008"
+            gradientEnd: "#162008",
+            imageUrl: "https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=900&q=80"
         ),
         ConsumerOffer(
             id: "o8",
             category: .coffee,
             businessName: "Brew McAllen",
-            dealText: "$2 OFF Any Drink",
-            shortDeal: "$2 OFF Coffee",
+            dealText: "$2 OFF Any Latte",
+            shortDeal: "$2 OFF Latte",
             distance: "0.4 mi",
             walkTime: "~5 min walk",
             spotsLeft: 15,
             spotsTotal: 25,
             countdownMinutes: 90,
             pin: "392847",
-            matchScore: 81,
-            matchReason: "You buy afternoon coffee near here",
+            matchScore: 95,
+            matchReason: "Daily 3pm Caffeine",
             gradientStart: "#0A0A06",
-            gradientEnd: "#181408"
+            gradientEnd: "#181408",
+            imageUrl: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=900&q=80"
         )
     ]
 }

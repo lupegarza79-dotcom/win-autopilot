@@ -4,7 +4,7 @@ struct CardBack: View {
     let offer: ConsumerOffer
 
     var body: some View {
-        VStack(spacing: 16) {
+        VStack(spacing: 14) {
             HStack(spacing: 8) {
                 Image(systemName: "checkmark.circle.fill")
                     .foregroundStyle(ConsumerColors.green)
@@ -16,16 +16,14 @@ struct CardBack: View {
             .padding(.horizontal, 12)
             .padding(.vertical, 10)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .background(
-                RoundedRectangle(cornerRadius: 12)
-                    .fill(ConsumerColors.bgGreen)
-            )
-            .overlay(
-                RoundedRectangle(cornerRadius: 12)
-                    .strokeBorder(ConsumerColors.borderGreen, lineWidth: 1)
-            )
+            .background(RoundedRectangle(cornerRadius: 12).fill(ConsumerColors.bgGreen))
+            .overlay(RoundedRectangle(cornerRadius: 12).strokeBorder(ConsumerColors.borderGreen, lineWidth: 1))
 
-            QRGrid(seed: offer.pin, size: 220)
+            Text("Your spot is held for this offer.")
+                .font(.system(size: 12, weight: .medium))
+                .foregroundStyle(ConsumerColors.textMid)
+
+            QRGrid(seed: offer.pin, size: 210)
 
             VStack(spacing: 10) {
                 Text("BACKUP PIN")
@@ -46,14 +44,8 @@ struct CardBack: View {
         }
         .padding(20)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(
-            RoundedRectangle(cornerRadius: 28)
-                .fill(ConsumerColors.bgCard)
-        )
-        .overlay(
-            RoundedRectangle(cornerRadius: 28)
-                .strokeBorder(ConsumerColors.borderLight, lineWidth: 1)
-        )
+        .background(RoundedRectangle(cornerRadius: 28).fill(ConsumerColors.bgCard))
+        .overlay(RoundedRectangle(cornerRadius: 28).strokeBorder(ConsumerColors.borderLight, lineWidth: 1))
         .shadow(color: .black.opacity(0.18), radius: 24, y: 12)
     }
 }

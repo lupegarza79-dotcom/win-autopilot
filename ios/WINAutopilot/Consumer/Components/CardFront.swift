@@ -20,7 +20,7 @@ struct CardFront: View {
                 endPoint: .bottomTrailing
             )
 
-            VStack(alignment: .leading, spacing: 16) {
+            VStack(alignment: .leading, spacing: 14) {
                 HStack(spacing: 6) {
                     Circle().fill(ConsumerColors.greenNeon).frame(width: 6, height: 6)
                     Text("WIN PICKED THIS FOR YOU")
@@ -30,34 +30,30 @@ struct CardFront: View {
                 }
                 .padding(.horizontal, 10)
                 .padding(.vertical, 6)
-                .background(
-                    Capsule().fill(ConsumerColors.green.opacity(0.12))
-                )
-                .overlay(
-                    Capsule().strokeBorder(ConsumerColors.green.opacity(0.35), lineWidth: 1)
-                )
+                .background(Capsule().fill(ConsumerColors.green.opacity(0.12)))
+                .overlay(Capsule().strokeBorder(ConsumerColors.green.opacity(0.35), lineWidth: 1))
+
+                DealHeroImage(offer: offer, height: 155)
 
                 HStack(spacing: 8) {
                     Text(offer.businessName)
-                        .font(.system(size: 14, weight: .semibold))
+                        .font(.system(size: 13, weight: .semibold))
                         .foregroundStyle(ConsumerColors.textLight)
                     Text("·").foregroundStyle(ConsumerColors.textLightMuted)
                     Text(offer.distance)
-                        .font(.system(size: 13))
+                        .font(.system(size: 12))
                         .foregroundStyle(ConsumerColors.textLightMid)
                     Text("·").foregroundStyle(ConsumerColors.textLightMuted)
                     Text(offer.walkTime)
-                        .font(.system(size: 13))
+                        .font(.system(size: 12))
                         .foregroundStyle(ConsumerColors.textLightMid)
                 }
 
                 Text(offer.dealText)
-                    .font(.system(size: 38, weight: .heavy))
+                    .font(.system(size: 32, weight: .heavy))
                     .foregroundStyle(ConsumerColors.textLight)
-                    .lineLimit(3)
+                    .lineLimit(2)
                     .minimumScaleFactor(0.7)
-
-                Spacer(minLength: 0)
 
                 SpotsBar(spotsLeft: offer.spotsLeft, spotsTotal: offer.spotsTotal)
 
@@ -70,40 +66,39 @@ struct CardFront: View {
                         ConsumerCountdownTimer(totalMinutes: offer.countdownMinutes)
                     }
                     Spacer()
-                    HStack(spacing: 5) {
-                        Circle().fill(ConsumerColors.greenNeon).frame(width: 5, height: 5)
+                    HStack(spacing: 4) {
                         Text("\(offer.matchScore)% match")
                             .font(.system(size: 11, weight: .heavy))
                             .foregroundStyle(ConsumerColors.greenNeon)
                     }
-                    .padding(.horizontal, 9)
-                    .padding(.vertical, 5)
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 4)
                     .background(Capsule().fill(ConsumerColors.green.opacity(0.14)))
                     .overlay(Capsule().strokeBorder(ConsumerColors.green.opacity(0.35), lineWidth: 1))
                 }
 
-                HStack(spacing: 10) {
-                    Image(systemName: "sparkles")
-                        .font(.system(size: 14, weight: .bold))
-                        .foregroundStyle(ConsumerColors.greenNeon)
+                VStack(alignment: .leading, spacing: 6) {
+                    HStack(spacing: 6) {
+                        Image(systemName: "sparkles")
+                            .font(.system(size: 10, weight: .bold))
+                            .foregroundStyle(ConsumerColors.aiBlue)
+                        Text("WHY THIS MATCHED")
+                            .font(.system(size: 9, weight: .heavy))
+                            .tracking(1.3)
+                            .foregroundStyle(ConsumerColors.aiBlue)
+                    }
                     Text(offer.matchReason)
                         .font(.system(size: 14, weight: .semibold))
                         .foregroundStyle(ConsumerColors.textLight)
                         .lineLimit(2)
                 }
-                .padding(.horizontal, 14)
-                .padding(.vertical, 12)
+                .padding(.horizontal, 12)
+                .padding(.vertical, 10)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .background(
-                    RoundedRectangle(cornerRadius: 12)
-                        .fill(Color.white.opacity(0.08))
-                )
-                .overlay(
-                    RoundedRectangle(cornerRadius: 12)
-                        .strokeBorder(ConsumerColors.green.opacity(0.25), lineWidth: 1)
-                )
+                .background(RoundedRectangle(cornerRadius: 12).fill(ConsumerColors.aiBlueSoft))
+                .overlay(RoundedRectangle(cornerRadius: 12).strokeBorder(ConsumerColors.aiBlueBorder, lineWidth: 1))
             }
-            .padding(20)
+            .padding(18)
         }
         .clipShape(RoundedRectangle(cornerRadius: 28))
         .overlay(

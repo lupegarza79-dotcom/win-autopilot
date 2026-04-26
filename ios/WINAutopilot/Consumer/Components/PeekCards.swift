@@ -2,6 +2,7 @@ import SwiftUI
 
 struct PeekCards: View {
     let offers: [ConsumerOffer]
+    var onSelect: (ConsumerOffer) -> Void = { _ in }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -15,10 +16,17 @@ struct PeekCards: View {
                     .font(.system(size: 11, weight: .medium))
                     .foregroundStyle(ConsumerColors.textMuted)
             }
+            .padding(.horizontal, 4)
+
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 10) {
                     ForEach(offers) { offer in
-                        PeekCard(offer: offer)
+                        Button {
+                            onSelect(offer)
+                        } label: {
+                            PeekCard(offer: offer)
+                        }
+                        .buttonStyle(PressScaleStyle())
                     }
                 }
                 .padding(.horizontal, 16)
@@ -32,22 +40,16 @@ struct PeekCards: View {
 private struct PeekCard: View {
     let offer: ConsumerOffer
 
-    private var categoryIcon: String {
-        switch offer.category {
-        case .tacos, .pizza: return "fork.knife"
-        case .coffee: return "cup.and.saucer.fill"
-        case .gas: return "fuelpump.fill"
-        case .haircut: return "scissors"
-        case .carwash: return "car.fill"
-        }
-    }
-
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
             HStack(spacing: 6) {
-                Image(systemName: categoryIcon)
-                    .font(.system(size: 14, weight: .bold))
-                    .foregroundStyle(ConsumerColors.green)
+                ZStack {
+                    Circle().fill(ConsumerColors.greenSoft)
+                    Image(systemName: offer.category.symbolName)
+                        .font(.system(size: 11, weight: .bold))
+                        .foregroundStyle(ConsumerColors.green)
+                }
+                .frame(width: 22, height: 22)
                 Spacer()
                 Text("\(offer.matchScore)%")
                     .font(.system(size: 10, weight: .heavy))
@@ -62,7 +64,7 @@ private struct PeekCard: View {
                 .foregroundStyle(ConsumerColors.textMuted)
         }
         .padding(12)
-        .frame(width: 130, height: 88, alignment: .topLeading)
+        .frame(width: 138, height: 92, alignment: .topLeading)
         .background(
             RoundedRectangle(cornerRadius: 14)
                 .fill(ConsumerColors.bgCard)

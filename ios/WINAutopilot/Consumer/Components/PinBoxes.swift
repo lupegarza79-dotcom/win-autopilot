@@ -16,7 +16,7 @@ struct PinBoxes: View {
                     )
                     .overlay(
                         RoundedRectangle(cornerRadius: 10)
-                            .strokeBorder(ConsumerColors.borderMid, lineWidth: 1)
+                            .strokeBorder(ConsumerColors.retailBlueBorder, lineWidth: 1)
                     )
             }
         }

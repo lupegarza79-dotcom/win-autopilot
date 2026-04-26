@@ -7,7 +7,7 @@ struct ReactionBar: View {
     var disabled: Bool = false
 
     var body: some View {
-        HStack(spacing: 22) {
+        HStack(spacing: 24) {
             ReactionButton(
                 icon: "xmark",
                 size: 52,
@@ -22,13 +22,13 @@ struct ReactionBar: View {
                 ZStack {
                     Circle()
                         .fill(ConsumerColors.textDark)
-                        .frame(width: 68, height: 68)
+                        .frame(width: 72, height: 72)
                     Circle()
                         .strokeBorder(ConsumerColors.greenNeon, lineWidth: 2)
-                        .frame(width: 68, height: 68)
+                        .frame(width: 72, height: 72)
                     VStack(spacing: 1) {
                         Image(systemName: "hand.tap.fill")
-                            .font(.system(size: 22, weight: .bold))
+                            .font(.system(size: 24, weight: .bold))
                             .foregroundStyle(ConsumerColors.greenNeon)
                         Text("CLAIM")
                             .font(.system(size: 9, weight: .heavy))
@@ -36,7 +36,7 @@ struct ReactionBar: View {
                             .foregroundStyle(ConsumerColors.textLight)
                     }
                 }
-                .shadow(color: ConsumerColors.green.opacity(0.4), radius: 18, y: 8)
+                .shadow(color: ConsumerColors.green.opacity(0.45), radius: 20, y: 10)
             }
             .buttonStyle(PressScaleStyle())
             .disabled(disabled)
