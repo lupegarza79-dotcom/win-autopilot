@@ -1,6 +1,9 @@
 import SwiftUI
 
 struct RadarState: View {
+    let topAlertLabel: String
+    let onShowBestMatch: () -> Void
+
     @State private var pulse = false
 
     var body: some View {
@@ -29,21 +32,64 @@ struct RadarState: View {
                     .font(.system(size: 26, weight: .heavy))
                     .foregroundStyle(ConsumerColors.green)
             }
-            .frame(height: 220)
+            .frame(height: 200)
 
             VStack(spacing: 6) {
                 Text("WIN is scanning for your next deal...")
                     .font(.system(size: 17, weight: .semibold))
                     .foregroundStyle(ConsumerColors.textDark)
                     .multilineTextAlignment(.center)
-                Text("We only show deals worth your time.")
+                Text("Scanning local offers, your alerts, and nearby rewards.")
                     .font(.system(size: 13))
                     .foregroundStyle(ConsumerColors.textMid)
                     .multilineTextAlignment(.center)
             }
             .padding(.horizontal, 24)
+
+            VStack(alignment: .leading, spacing: 8) {
+                statusRow(icon: "sparkles", text: topAlertLabel)
+                statusRow(icon: "location.fill", text: "Checking offers within 1.5 mi")
+                statusRow(icon: "checkmark.seal.fill", text: "Only showing matches above 80%")
+            }
+            .padding(.horizontal, 16)
+            .padding(.vertical, 12)
+            .background(
+                RoundedRectangle(cornerRadius: 14).fill(ConsumerColors.bgCard)
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 14).strokeBorder(ConsumerColors.borderLight, lineWidth: 1)
+            )
+            .padding(.horizontal, 24)
+
+            Button(action: onShowBestMatch) {
+                HStack(spacing: 8) {
+                    Image(systemName: "sparkles")
+                        .font(.system(size: 12, weight: .bold))
+                    Text("Show best match now")
+                        .font(.system(size: 14, weight: .semibold))
+                }
+                .foregroundStyle(ConsumerColors.textDark)
+                .padding(.horizontal, 18)
+                .padding(.vertical, 12)
+                .background(Capsule().fill(ConsumerColors.greenNeon))
+            }
+            .buttonStyle(PressScaleStyle())
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .onAppear { pulse = true }
+    }
+
+    private func statusRow(icon: String, text: String) -> some View {
+        HStack(spacing: 10) {
+            Image(systemName: icon)
+                .font(.system(size: 11, weight: .bold))
+                .foregroundStyle(ConsumerColors.green)
+                .frame(width: 16)
+            Text(text)
+                .font(.system(size: 12, weight: .medium))
+                .foregroundStyle(ConsumerColors.textMid)
+                .lineLimit(1)
+            Spacer(minLength: 0)
+        }
     }
 }

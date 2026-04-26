@@ -32,11 +32,22 @@ struct PeekCards: View {
 private struct PeekCard: View {
     let offer: ConsumerOffer
 
+    private var categoryIcon: String {
+        switch offer.category {
+        case .tacos, .pizza: return "fork.knife"
+        case .coffee: return "cup.and.saucer.fill"
+        case .gas: return "fuelpump.fill"
+        case .haircut: return "scissors"
+        case .carwash: return "car.fill"
+        }
+    }
+
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
-            HStack {
-                Text(offer.category.emoji)
-                    .font(.system(size: 18))
+            HStack(spacing: 6) {
+                Image(systemName: categoryIcon)
+                    .font(.system(size: 14, weight: .bold))
+                    .foregroundStyle(ConsumerColors.green)
                 Spacer()
                 Text("\(offer.matchScore)%")
                     .font(.system(size: 10, weight: .heavy))

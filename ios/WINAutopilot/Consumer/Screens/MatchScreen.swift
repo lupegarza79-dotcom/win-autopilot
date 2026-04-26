@@ -67,12 +67,27 @@ struct MatchScreen: View {
                                 removal: .opacity
                             ))
                     } else {
-                        RadarState()
-                            .transition(.opacity)
+                        RadarState(
+                            topAlertLabel: BehaviorEngine.getTopAlertLabel(alerts: MockUser.alerts),
+                            onShowBestMatch: { restoreBestMatch() }
+                        )
+                        .transition(.opacity)
                     }
                 }
                 .frame(maxHeight: .infinity)
                 .animation(.spring(response: 0.5, dampingFraction: 0.85), value: topMatch?.id)
+                .onChange(of: topMatch?.id) { _, newId in
+                    if newId == nil {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
+                            withAnimation(.spring(response: 0.5, dampingFraction: 0.85)) {
+                                dismissedIds.removeAll()
+                                behavior.suppressedCategories.removeAll()
+                                isFlipped = false
+                            }
+                            showToast("New deals just matched near you.")
+                        }
+                    }
+                }
 
                 if let offer = topMatch {
                     ReactionBar(
@@ -160,6 +175,16 @@ struct MatchScreen: View {
         UIImpactFeedbackGenerator(style: .medium).impactOccurred()
         SignalTracker.recordRemind(offerId: offer.id, category: offer.category)
         showToast("Remind me later. Got it.")
+    }
+
+    private func restoreBestMatch() {
+        UIImpactFeedbackGenerator(style: .light).impactOccurred()
+        withAnimation(.spring(response: 0.5, dampingFraction: 0.85)) {
+            dismissedIds.removeAll()
+            behavior.suppressedCategories.removeAll()
+            isFlipped = false
+        }
+        showToast("Best match restored.")
     }
 
     private func showToast(_ message: String) {

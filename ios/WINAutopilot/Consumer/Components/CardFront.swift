@@ -70,36 +70,37 @@ struct CardFront: View {
                         ConsumerCountdownTimer(totalMinutes: offer.countdownMinutes)
                     }
                     Spacer()
-                    VStack(alignment: .trailing, spacing: 2) {
-                        Text("MATCH")
-                            .font(.system(size: 9, weight: .heavy))
-                            .tracking(1.2)
-                            .foregroundStyle(ConsumerColors.textLightMuted)
-                        Text("\(offer.matchScore)%")
-                            .font(.system(size: 28, weight: .heavy, design: .rounded))
+                    HStack(spacing: 5) {
+                        Circle().fill(ConsumerColors.greenNeon).frame(width: 5, height: 5)
+                        Text("\(offer.matchScore)% match")
+                            .font(.system(size: 11, weight: .heavy))
                             .foregroundStyle(ConsumerColors.greenNeon)
                     }
+                    .padding(.horizontal, 9)
+                    .padding(.vertical, 5)
+                    .background(Capsule().fill(ConsumerColors.green.opacity(0.14)))
+                    .overlay(Capsule().strokeBorder(ConsumerColors.green.opacity(0.35), lineWidth: 1))
                 }
 
-                HStack(spacing: 8) {
+                HStack(spacing: 10) {
                     Image(systemName: "sparkles")
-                        .font(.system(size: 11))
+                        .font(.system(size: 14, weight: .bold))
                         .foregroundStyle(ConsumerColors.greenNeon)
                     Text(offer.matchReason)
-                        .font(.system(size: 12, weight: .medium))
-                        .foregroundStyle(ConsumerColors.textLightMid)
+                        .font(.system(size: 14, weight: .semibold))
+                        .foregroundStyle(ConsumerColors.textLight)
                         .lineLimit(2)
                 }
-                .padding(.horizontal, 12)
-                .padding(.vertical, 10)
+                .padding(.horizontal, 14)
+                .padding(.vertical, 12)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .background(
                     RoundedRectangle(cornerRadius: 12)
-                        .fill(Color.white.opacity(0.05))
+                        .fill(Color.white.opacity(0.08))
                 )
                 .overlay(
                     RoundedRectangle(cornerRadius: 12)
-                        .strokeBorder(Color.white.opacity(0.08), lineWidth: 1)
+                        .strokeBorder(ConsumerColors.green.opacity(0.25), lineWidth: 1)
                 )
             }
             .padding(20)

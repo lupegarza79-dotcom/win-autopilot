@@ -7,10 +7,11 @@ struct ReactionBar: View {
     var disabled: Bool = false
 
     var body: some View {
-        HStack(spacing: 18) {
+        HStack(spacing: 22) {
             ReactionButton(
                 icon: "xmark",
-                size: 60,
+                size: 52,
+                iconSize: 18,
                 bg: ConsumerColors.bgCard,
                 fg: Color(red: 0.86, green: 0.20, blue: 0.27),
                 border: ConsumerColors.borderMid,
@@ -21,16 +22,16 @@ struct ReactionBar: View {
                 ZStack {
                     Circle()
                         .fill(ConsumerColors.textDark)
-                        .frame(width: 88, height: 88)
+                        .frame(width: 68, height: 68)
                     Circle()
                         .strokeBorder(ConsumerColors.greenNeon, lineWidth: 2)
-                        .frame(width: 88, height: 88)
-                    VStack(spacing: 2) {
+                        .frame(width: 68, height: 68)
+                    VStack(spacing: 1) {
                         Image(systemName: "hand.tap.fill")
-                            .font(.system(size: 24, weight: .bold))
+                            .font(.system(size: 22, weight: .bold))
                             .foregroundStyle(ConsumerColors.greenNeon)
                         Text("CLAIM")
-                            .font(.system(size: 10, weight: .heavy))
+                            .font(.system(size: 9, weight: .heavy))
                             .tracking(1.4)
                             .foregroundStyle(ConsumerColors.textLight)
                     }
@@ -42,7 +43,8 @@ struct ReactionBar: View {
 
             ReactionButton(
                 icon: "clock.fill",
-                size: 60,
+                size: 44,
+                iconSize: 16,
                 bg: ConsumerColors.bgCard,
                 fg: ConsumerColors.amber,
                 border: ConsumerColors.borderMid,
@@ -56,6 +58,7 @@ struct ReactionBar: View {
 private struct ReactionButton: View {
     let icon: String
     let size: CGFloat
+    let iconSize: CGFloat
     let bg: Color
     let fg: Color
     let border: Color
@@ -67,7 +70,7 @@ private struct ReactionButton: View {
                 Circle().fill(bg)
                 Circle().strokeBorder(border, lineWidth: 1)
                 Image(systemName: icon)
-                    .font(.system(size: 20, weight: .bold))
+                    .font(.system(size: iconSize, weight: .bold))
                     .foregroundStyle(fg)
             }
             .frame(width: size, height: size)

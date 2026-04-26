@@ -33,6 +33,10 @@ struct AlertsScreen: View {
                             AlertChip(alert: alert)
                         }
                     }
+                    Text("These alerts train your matches.")
+                        .font(.system(size: 12))
+                        .foregroundStyle(ConsumerColors.textMuted)
+                        .padding(.top, 2)
 
                     Spacer(minLength: 24)
                 }

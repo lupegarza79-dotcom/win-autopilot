@@ -1,5 +1,22 @@
 import Foundation
 
+// TODO Phase 2 — Ghost Merchant:
+// Merchant only inputs:
+// - empty seats
+// - inventory to move
+// - pickup window
+// - max redemptions
+// - margin guard
+//
+// WIN decides:
+// - which users to notify
+// - when to notify
+// - what offer format to use
+// - how many spots to release
+// - when to stop the campaign
+//
+// Do not build this UI now.
+
 enum BehaviorEngine {
     static func getTopMatch(behavior: UserBehavior, exclude: Set<String> = []) -> ConsumerOffer? {
         let now = Date()
@@ -32,5 +49,12 @@ enum BehaviorEngine {
             return "Evening deal matched your alerts."
         }
         return "Best deal near you right now."
+    }
+
+    static func getTopAlertLabel(alerts: [ConsumerAlert]) -> String {
+        guard let first = alerts.first(where: { $0.active }) else {
+            return "Watching for your next best deal near McAllen..."
+        }
+        return "Watching for \(first.label.lowercased()) \(first.condition.lowercased()) near McAllen..."
     }
 }
