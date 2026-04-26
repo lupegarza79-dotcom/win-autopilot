@@ -6,9 +6,9 @@ struct WINAutopilotApp: App {
 
     var body: some Scene {
         WindowGroup {
-            AppTabs()
+            ConsumerAppStack()
                 .environment(appState)
-                .preferredColorScheme(.dark)
+                .preferredColorScheme(.light)
         }
     }
 }
