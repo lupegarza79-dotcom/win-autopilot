@@ -84,7 +84,7 @@ struct MatchScreen: View {
                         .transition(.opacity)
                     }
                 }
-                .frame(maxHeight: .infinity)
+                .frame(maxHeight: UIScreen.main.bounds.height * 0.56)
                 .animation(.spring(response: 0.5, dampingFraction: 0.85), value: topMatch?.id)
                 .onChange(of: topMatch?.id) { _, newId in
                     if newId == nil {

@@ -33,7 +33,7 @@ struct CardFront: View {
                 .background(Capsule().fill(ConsumerColors.green.opacity(0.12)))
                 .overlay(Capsule().strokeBorder(ConsumerColors.green.opacity(0.35), lineWidth: 1))
 
-                DealHeroImage(offer: offer, height: 155)
+                DealHeroImage(offer: offer, height: 168)
 
                 HStack(spacing: 8) {
                     Text(offer.businessName)
@@ -50,7 +50,7 @@ struct CardFront: View {
                 }
 
                 Text(offer.dealText)
-                    .font(.system(size: 32, weight: .heavy))
+                    .font(.system(size: 36, weight: .heavy))
                     .foregroundStyle(ConsumerColors.textLight)
                     .lineLimit(2)
                     .minimumScaleFactor(0.7)

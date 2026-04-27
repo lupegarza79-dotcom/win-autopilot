@@ -24,37 +24,38 @@ enum BehaviorEngine {
         var score = offer.matchScore
         let now = Date()
         let hour = Calendar.current.component(.hour, from: now)
+        let isLunch = (11...14).contains(hour)
+        let isMorning = (7...10).contains(hour)
+        let isEvening = (16...19).contains(hour)
 
-        if behavior.topCategories.contains(offer.category) { score += 5 }
-
-        switch offer.category {
-        case .tacos, .pizza:
-            if (11...14).contains(hour) { score += 5 }
-        case .coffee:
-            if (7...10).contains(hour) { score += 4 }
-        case .gas:
-            if (16...19).contains(hour) { score += 4 }
-        default:
-            break
-        }
+        // BONUSES — Predictive Intelligence
+        if isLunch && offer.category == .tacos { score += 12 }
+        if isMorning && offer.category == .coffee { score += 10 }
+        if behavior.topCategories.contains(offer.category) { score += 8 }
+        if isLunch && offer.category == .pizza { score += 6 }
+        if isEvening && offer.category == .gas { score += 4 }
 
         let distMiles = Double(offer.distance.replacingOccurrences(of: " mi", with: "")) ?? 99
-        if distMiles < 0.8 { score += 3 }
+        if distMiles < 0.6 { score += 5 }
+
+        let isAlertMatch = MockUser.alerts.contains { $0.active && $0.category == offer.category }
+        if isAlertMatch { score += 15 }
 
         if offer.countdownMinutes <= 90 { score += 3 }
-        if offer.countdownMinutes > 180 { score -= 5 }
-
         if offer.spotsLeft > 0 && offer.spotsLeft <= 20 { score += 2 }
+
+        // PENALTIES — Anti-Fatigue
+        let recentlyPassed = behavior.passSignals.contains { $0.offerId == offer.id }
+        if recentlyPassed { score -= 40 }
 
         let suppressed = behavior.suppressedCategories.contains { s in
             s.category == offer.category && s.until > now
         }
-        if suppressed { score -= 20 }
+        if suppressed { score -= 60 }
 
-        let recentPass = behavior.passSignals.contains { $0.offerId == offer.id }
-        if recentPass { score -= 10 }
+        if offer.countdownMinutes > 180 { score -= 5 }
 
-        print("[WIN BRAIN] \(offer.businessName) base=\(offer.matchScore) effective=\(score)")
+        print("[WIN BRAIN] evaluating \(offer.businessName) base=\(offer.matchScore) effective=\(score)")
         return score
     }
 
@@ -94,7 +95,7 @@ enum BehaviorEngine {
         if (17...19).contains(hour) {
             return "Evening deal matched your alerts."
         }
-        return "Best deal near you right now."
+        return "Nearby reward matched your habits."
     }
 
     static func getTopAlertLabel(alerts: [ConsumerAlert]) -> String {
