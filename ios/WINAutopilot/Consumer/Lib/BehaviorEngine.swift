@@ -55,23 +55,43 @@ enum BehaviorEngine {
 
         if offer.countdownMinutes > 180 { score -= 5 }
 
+        // TrustScore tie-breakers — small influence, not dominant.
+        if behavior.trustScore >= 90 {
+            score += 5
+        } else if behavior.trustScore >= 80 {
+            score += 3
+        }
+        if behavior.noShowCount >= 3 { score -= 8 }
+
         print("[WIN BRAIN] evaluating \(offer.businessName) base=\(offer.matchScore) effective=\(score)")
+        print("[WIN BRAIN] trustScore=\(behavior.trustScore) noShows=\(behavior.noShowCount)")
         return score
     }
 
-    static func getTopMatch(behavior: UserBehavior, exclude: Set<String> = []) -> ConsumerOffer? {
+    static func getTopMatch(behavior: UserBehavior, exclude: Set<String> = [], threshold: Int = 80) -> ConsumerOffer? {
         let scored: [(ConsumerOffer, Int)] = MockOffers.all
             .filter { !exclude.contains($0.id) }
             .map { ($0, effectiveScore(for: $0, behavior: behavior)) }
-            .filter { $0.1 >= 80 }
+            .filter { $0.1 >= threshold }
             .sorted { $0.1 > $1.1 }
 
         if let top = scored.first {
             print("[WIN BRAIN] selected \(top.0.businessName)")
             return top.0
         }
-        print("[WIN BRAIN] radar state — no effective score above 80")
+        print("[WIN BRAIN] radar state — no effective score above \(threshold)")
         return nil
+    }
+
+    // Demo guard: if Radar would otherwise stay dead, lower threshold once.
+    // TODO Production: replace demo threshold guard with real merchant offer stream,
+    // push notifications, and live offer creation.
+    static func getTopMatchWithDemoGuard(behavior: UserBehavior, exclude: Set<String> = []) -> ConsumerOffer? {
+        if let top = getTopMatch(behavior: behavior, exclude: exclude, threshold: 80) {
+            return top
+        }
+        print("[WIN BRAIN] demo_guard lowering threshold to avoid dead radar")
+        return getTopMatch(behavior: behavior, exclude: exclude, threshold: 75)
     }
 
     static func getPeekOffers(topMatch: ConsumerOffer?, exclude: Set<String> = []) -> [ConsumerOffer] {

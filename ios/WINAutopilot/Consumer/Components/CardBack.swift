@@ -19,11 +19,27 @@ struct CardBack: View {
             .background(RoundedRectangle(cornerRadius: 12).fill(ConsumerColors.bgGreen))
             .overlay(RoundedRectangle(cornerRadius: 12).strokeBorder(ConsumerColors.borderGreen, lineWidth: 1))
 
-            Text("Your spot is held for this offer.")
+            Text("Your spot is held and verified.")
                 .font(.system(size: 12, weight: .medium))
                 .foregroundStyle(ConsumerColors.textMid)
 
             QRGrid(seed: offer.pin, size: 210)
+
+            HStack(spacing: 6) {
+                Image(systemName: "checkmark.shield.fill")
+                    .font(.system(size: 10, weight: .bold))
+                Text("Verified spot hold")
+                    .font(.system(size: 10, weight: .heavy))
+                    .tracking(1.0)
+            }
+            .foregroundStyle(ConsumerColors.retailBlue)
+            .padding(.horizontal, 10)
+            .padding(.vertical, 5)
+            .background(Capsule().fill(ConsumerColors.retailBlueSoft))
+            .overlay(Capsule().strokeBorder(ConsumerColors.retailBlueBorder, lineWidth: 1))
+
+            // TODO Production: merchant_acceptance handshake prevents fake or expired offers.
+            // Merchant confirms offer availability before high-intent users are notified.
 
             VStack(spacing: 10) {
                 Text("BACKUP PIN")

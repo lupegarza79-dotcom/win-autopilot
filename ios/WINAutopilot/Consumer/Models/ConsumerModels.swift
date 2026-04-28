@@ -72,6 +72,16 @@ struct UserBehavior {
     var topCategories: [ConsumerCategory] = [.tacos, .coffee, .gas]
     var claimedCount: Int = 14
     var totalSaved: Int = 68
+
+    // TrustScore — local data only, no dedicated UI screen.
+    // TODO Production:
+    // TrustScore = redemption rate × recency weight × category consistency × no-show penalty.
+    // High TrustScore users may receive earlier access to limited spots and Shadow Deals.
+    var trustScore: Int = 87
+    var claimCount: Int = 14
+    var redeemCount: Int = 11
+    var noShowCount: Int = 2
+    var estimatedSavings: Double = 68.0
 }
 
 nonisolated struct ConsumerAlert: Identifiable, Sendable {

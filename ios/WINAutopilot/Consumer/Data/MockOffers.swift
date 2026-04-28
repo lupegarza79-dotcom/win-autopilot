@@ -15,7 +15,7 @@ enum MockOffers {
             countdownMinutes: 89,
             pin: "482913",
             matchScore: 98,
-            matchReason: "You claimed tacos 4 Tuesdays in a row",
+            matchReason: "You usually claim tacos at lunch + 0.3 mi away + spots are limited.",
             gradientStart: "#061210",
             gradientEnd: "#0C2018",
             imageUrl: "https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=900&q=80"
@@ -33,7 +33,7 @@ enum MockOffers {
             countdownMinutes: 44,
             pin: "371204",
             matchScore: 91,
-            matchReason: "You buy coffee here 3x a week",
+            matchReason: "Morning coffee pattern + nearby shop + free offer.",
             gradientStart: "#060A14",
             gradientEnd: "#0A1428",
             imageUrl: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=900&q=80"
@@ -51,7 +51,7 @@ enum MockOffers {
             countdownMinutes: 180,
             pin: "904731",
             matchScore: 84,
-            matchReason: "You fill up on Tuesdays near this area",
+            matchReason: "Gas alert matched + near your route + price under $3.",
             gradientStart: "#100A04",
             gradientEnd: "#1A1008",
             imageUrl: "https://images.unsplash.com/photo-1542362567-b07e54358753?w=900&q=80"
@@ -69,7 +69,7 @@ enum MockOffers {
             countdownMinutes: 22,
             pin: "157823",
             matchScore: 76,
-            matchReason: "You saved this category last week",
+            matchReason: "You saved this last week + nearby + spots running low.",
             gradientStart: "#0A0414",
             gradientEnd: "#140820",
             imageUrl: "https://images.unsplash.com/photo-1585747860715-2ba37e788b70?w=900&q=80"
@@ -87,7 +87,7 @@ enum MockOffers {
             countdownMinutes: 60,
             pin: "293847",
             matchScore: 92,
-            matchReason: "Pizza Night Friday",
+            matchReason: "Weekend pizza pattern + strong offer + pickup window active.",
             gradientStart: "#140614",
             gradientEnd: "#200A20",
             imageUrl: "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=900&q=80"
@@ -105,7 +105,7 @@ enum MockOffers {
             countdownMinutes: 75,
             pin: "847291",
             matchScore: 85,
-            matchReason: "Bi-weekly wash routine",
+            matchReason: "Bi-weekly wash routine + nearby service + limited spots.",
             gradientStart: "#040C14",
             gradientEnd: "#081828",
             imageUrl: "https://images.unsplash.com/photo-1520340356584-f9917d1eea6f?w=900&q=80"
@@ -123,7 +123,7 @@ enum MockOffers {
             countdownMinutes: 120,
             pin: "561738",
             matchScore: 88,
-            matchReason: "Tuesday Taco Habit",
+            matchReason: "Tuesday taco habit + close walk + active alert match.",
             gradientStart: "#0C1006",
             gradientEnd: "#162008",
             imageUrl: "https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=900&q=80"
@@ -141,7 +141,7 @@ enum MockOffers {
             countdownMinutes: 90,
             pin: "392847",
             matchScore: 95,
-            matchReason: "Daily 3pm Caffeine",
+            matchReason: "Daily 3pm caffeine pattern + 0.4 mi away + price drop active.",
             gradientStart: "#0A0A06",
             gradientEnd: "#181408",
             imageUrl: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=900&q=80"

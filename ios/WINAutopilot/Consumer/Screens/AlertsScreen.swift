@@ -41,10 +41,15 @@ struct AlertsScreen: View {
                             AlertChip(alert: alert)
                         }
                     }
-                    Text("These alerts train your matches.")
-                        .font(.system(size: 12))
-                        .foregroundStyle(ConsumerColors.textMuted)
-                        .padding(.top, 2)
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("These alerts train your matches.")
+                            .font(.system(size: 12))
+                            .foregroundStyle(ConsumerColors.textMuted)
+                        Text("Reliable redemptions improve your match priority.")
+                            .font(.system(size: 11))
+                            .foregroundStyle(ConsumerColors.textHint)
+                    }
+                    .padding(.top, 2)
 
                     Spacer(minLength: 24)
                 }

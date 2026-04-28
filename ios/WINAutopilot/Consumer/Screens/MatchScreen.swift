@@ -17,7 +17,7 @@ struct MatchScreen: View {
            let offer = MockOffers.all.first(where: { $0.id == forcedId }) {
             return offer
         }
-        return BehaviorEngine.getTopMatch(behavior: behavior, exclude: dismissedIds)
+        return BehaviorEngine.getTopMatchWithDemoGuard(behavior: behavior, exclude: dismissedIds)
     }
 
     private var peekOffers: [ConsumerOffer] {
@@ -37,6 +37,9 @@ struct MatchScreen: View {
 
                 AIContextLine(text: contextLine, isScanning: topMatch == nil)
                     .padding(.horizontal, 16)
+
+                savingsMemoryLine
+                    .padding(.horizontal, 20)
 
                 ZStack {
                     if let offer = topMatch {
@@ -136,6 +139,18 @@ struct MatchScreen: View {
         }
     }
 
+    private var savingsMemoryLine: some View {
+        HStack(spacing: 6) {
+            Image(systemName: "sparkles")
+                .font(.system(size: 10, weight: .bold))
+                .foregroundStyle(ConsumerColors.aiBlue)
+            Text("WIN has helped you save about $\(Int(behavior.estimatedSavings)).")
+                .font(.system(size: 11, weight: .medium))
+                .foregroundStyle(ConsumerColors.textMuted)
+            Spacer(minLength: 0)
+        }
+    }
+
     private var headerRow: some View {
         HStack {
             HStack(spacing: 6) {
@@ -169,7 +184,14 @@ struct MatchScreen: View {
 
     private func handleClaim(_ offer: ConsumerOffer) {
         UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
-        SignalTracker.recordClaim(offerId: offer.id, category: offer.category)
+        SignalTracker.recordClaim(
+            offerId: offer.id,
+            category: offer.category,
+            businessName: offer.businessName,
+            distance: offer.distance,
+            countdownMinutes: offer.countdownMinutes,
+            matchScore: offer.matchScore
+        )
         withAnimation(.spring(response: 0.6, dampingFraction: 0.8)) {
             isFlipped = true
         }
@@ -192,7 +214,7 @@ struct MatchScreen: View {
 
     private func selectPeek(_ offer: ConsumerOffer) {
         UIImpactFeedbackGenerator(style: .light).impactOccurred()
-        print("[WIN SIGNAL] peek_selected offer=\(offer.id) category=\(offer.category.rawValue)")
+        SignalTracker.recordPeekSelected(offerId: offer.id, category: offer.category)
         withAnimation(.spring(response: 0.5, dampingFraction: 0.85)) {
             dismissedIds.remove(offer.id)
             forcedOfferId = offer.id
