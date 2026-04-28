@@ -87,7 +87,7 @@ struct MatchScreen: View {
                         .transition(.opacity)
                     }
                 }
-                .frame(maxHeight: UIScreen.main.bounds.height * 0.56)
+                .frame(maxHeight: UIScreen.main.bounds.height * 0.52)
                 .animation(.spring(response: 0.5, dampingFraction: 0.85), value: topMatch?.id)
                 .onChange(of: topMatch?.id) { _, newId in
                     if newId == nil {
@@ -117,10 +117,13 @@ struct MatchScreen: View {
                 if !peekOffers.isEmpty {
                     PeekCards(offers: peekOffers, onSelect: { selectPeek($0) })
                         .padding(.horizontal, 16)
-                        .padding(.bottom, 8)
+                        .frame(minHeight: 110)
+                        .padding(.bottom, 12)
+                } else {
+                    Spacer(minLength: 0)
                 }
             }
-            .padding(.top, 8)
+            .padding(.top, 4)
 
             if let msg = toastMessage {
                 VStack {
