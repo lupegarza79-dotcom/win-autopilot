@@ -70,8 +70,15 @@ struct UserBehavior {
     var suppressedCategories: [SuppressedCategory] = []
     var peakHours: [String] = ["12pm", "1pm", "6pm"]
     var topCategories: [ConsumerCategory] = [.tacos, .coffee, .gas]
-    var claimedCount: Int = 14
-    var totalSaved: Int = 68
+    var trustScore: Int = 87
+    var claimCount: Int = 14
+    var redeemCount: Int = 11
+    var noShowCount: Int = 2
+    var estimatedSavings: Double = 68.0
+
+    // TODO Production:
+    // TrustScore = redemption rate × recency weight × category consistency × no-show penalty.
+    // High TrustScore users may receive earlier access to limited spots and Shadow Deals.
 }
 
 nonisolated struct ConsumerAlert: Identifiable, Sendable {

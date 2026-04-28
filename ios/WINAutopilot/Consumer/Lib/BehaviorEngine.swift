@@ -18,8 +18,24 @@ import Foundation
 // Do not build this UI now.
 //
 // TODO Production: replace demo radar reset with real merchant offer stream / notification engine.
+// TODO Production: replace demo threshold guard with real merchant offer stream,
+// push notifications, and live offer creation.
 
 enum BehaviorEngine {
+    private static func recentlyPassed(_ offerId: String, behavior: UserBehavior) -> Bool {
+        behavior.passSignals.contains { $0.offerId == offerId }
+    }
+
+    private static func isSuppressed(_ category: ConsumerCategory, behavior: UserBehavior, now: Date) -> Bool {
+        behavior.suppressedCategories.contains { s in
+            s.category == category && s.until > now
+        }
+    }
+
+    private static func isAlertMatch(_ offer: ConsumerOffer) -> Bool {
+        MockUser.alerts.contains { $0.active && $0.category == offer.category }
+    }
+
     static func effectiveScore(for offer: ConsumerOffer, behavior: UserBehavior) -> Int {
         var score = offer.matchScore
         let now = Date()
@@ -38,20 +54,27 @@ enum BehaviorEngine {
         let distMiles = Double(offer.distance.replacingOccurrences(of: " mi", with: "")) ?? 99
         if distMiles < 0.6 { score += 5 }
 
-        let isAlertMatch = MockUser.alerts.contains { $0.active && $0.category == offer.category }
-        if isAlertMatch { score += 15 }
+        if isAlertMatch(offer) { score += 15 }
 
         if offer.countdownMinutes <= 90 { score += 3 }
         if offer.spotsLeft > 0 && offer.spotsLeft <= 20 { score += 2 }
 
-        // PENALTIES — Anti-Fatigue
-        let recentlyPassed = behavior.passSignals.contains { $0.offerId == offer.id }
-        if recentlyPassed { score -= 40 }
-
-        let suppressed = behavior.suppressedCategories.contains { s in
-            s.category == offer.category && s.until > now
+        if behavior.trustScore >= 90 {
+            score += 5
+        } else if behavior.trustScore >= 80 {
+            score += 3
         }
-        if suppressed { score -= 60 }
+
+        if behavior.noShowCount >= 3 {
+            score -= 8
+        }
+
+        print("[WIN BRAIN] trustScore=\(behavior.trustScore) noShows=\(behavior.noShowCount)")
+
+        // PENALTIES — Anti-Fatigue
+        if recentlyPassed(offer.id, behavior: behavior) { score -= 40 }
+
+        if isSuppressed(offer.category, behavior: behavior, now: now) { score -= 60 }
 
         if offer.countdownMinutes > 180 { score -= 5 }
 
@@ -59,18 +82,18 @@ enum BehaviorEngine {
         return score
     }
 
-    static func getTopMatch(behavior: UserBehavior, exclude: Set<String> = []) -> ConsumerOffer? {
+    static func getTopMatch(behavior: UserBehavior, exclude: Set<String> = [], minimumScore: Int = 80) -> ConsumerOffer? {
         let scored: [(ConsumerOffer, Int)] = MockOffers.all
             .filter { !exclude.contains($0.id) }
             .map { ($0, effectiveScore(for: $0, behavior: behavior)) }
-            .filter { $0.1 >= 80 }
+            .filter { $0.1 >= minimumScore }
             .sorted { $0.1 > $1.1 }
 
         if let top = scored.first {
             print("[WIN BRAIN] selected \(top.0.businessName)")
             return top.0
         }
-        print("[WIN BRAIN] radar state — no effective score above 80")
+        print("[WIN BRAIN] radar state — no effective score above \(minimumScore)")
         return nil
     }
 

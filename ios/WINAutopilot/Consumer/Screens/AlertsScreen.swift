@@ -45,6 +45,9 @@ struct AlertsScreen: View {
                         .font(.system(size: 12))
                         .foregroundStyle(ConsumerColors.textMuted)
                         .padding(.top, 2)
+                    Text("Reliable redemptions improve your match priority.")
+                        .font(.system(size: 11, weight: .medium))
+                        .foregroundStyle(ConsumerColors.retailBlue)
 
                     Spacer(minLength: 24)
                 }

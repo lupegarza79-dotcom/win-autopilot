@@ -10,6 +10,8 @@ struct MatchScreen: View {
     @State private var toastMessage: String?
     @State private var toastWorkItem: DispatchWorkItem?
     @State private var forcedOfferId: String?
+    @State private var nilMatchStreak = 0
+    @State private var useDemoThreshold = false
 
     private var topMatch: ConsumerOffer? {
         if let forcedId = forcedOfferId,
@@ -17,7 +19,8 @@ struct MatchScreen: View {
            let offer = MockOffers.all.first(where: { $0.id == forcedId }) {
             return offer
         }
-        return BehaviorEngine.getTopMatch(behavior: behavior, exclude: dismissedIds)
+        let threshold = useDemoThreshold ? 75 : 80
+        return BehaviorEngine.getTopMatch(behavior: behavior, exclude: dismissedIds, minimumScore: threshold)
     }
 
     private var peekOffers: [ConsumerOffer] {
@@ -25,7 +28,13 @@ struct MatchScreen: View {
     }
 
     private var contextLine: String {
-        topMatch == nil ? "WIN is watching your alerts." : BehaviorEngine.getContextLine()
+        if topMatch == nil {
+            return "WIN is watching your alerts."
+        }
+        if !dismissedIds.isEmpty {
+            return "New match found from your alerts."
+        }
+        return BehaviorEngine.getContextLine()
     }
 
     var body: some View {
@@ -37,6 +46,12 @@ struct MatchScreen: View {
 
                 AIContextLine(text: contextLine, isScanning: topMatch == nil)
                     .padding(.horizontal, 16)
+
+                Text("WIN has helped you save about $\(Int(behavior.estimatedSavings)).")
+                    .font(.system(size: 11, weight: .medium))
+                    .foregroundStyle(ConsumerColors.textMuted)
+                    .padding(.horizontal, 16)
+                    .frame(maxWidth: .infinity, alignment: .leading)
 
                 ZStack {
                     if let offer = topMatch {
@@ -84,20 +99,29 @@ struct MatchScreen: View {
                         .transition(.opacity)
                     }
                 }
-                .frame(maxHeight: UIScreen.main.bounds.height * 0.56)
+                .frame(maxHeight: UIScreen.main.bounds.height * 0.52)
                 .animation(.spring(response: 0.5, dampingFraction: 0.85), value: topMatch?.id)
                 .onChange(of: topMatch?.id) { _, newId in
                     if newId == nil {
+                        nilMatchStreak += 1
+                        if nilMatchStreak >= 2, !useDemoThreshold {
+                            useDemoThreshold = true
+                            print("[WIN BRAIN] demo_guard lowering threshold to avoid dead radar")
+                        }
                         // TODO Production: replace demo reset with real merchant offer stream / notification engine.
                         DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
                             withAnimation(.spring(response: 0.5, dampingFraction: 0.85)) {
                                 dismissedIds.removeAll()
                                 behavior.suppressedCategories.removeAll()
+                                behavior.passSignals.removeAll()
                                 forcedOfferId = nil
                                 isFlipped = false
                             }
                             showToast("New deals just matched near you.")
                         }
+                    } else {
+                        nilMatchStreak = 0
+                        useDemoThreshold = false
                     }
                 }
 
@@ -113,8 +137,9 @@ struct MatchScreen: View {
 
                 if !peekOffers.isEmpty {
                     PeekCards(offers: peekOffers, onSelect: { selectPeek($0) })
+                        .frame(minHeight: 70)
                         .padding(.horizontal, 16)
-                        .padding(.bottom, 8)
+                        .padding(.bottom, 18)
                 }
             }
             .padding(.top, 8)
@@ -169,7 +194,7 @@ struct MatchScreen: View {
 
     private func handleClaim(_ offer: ConsumerOffer) {
         UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
-        SignalTracker.recordClaim(offerId: offer.id, category: offer.category)
+        SignalTracker.recordClaim(offer: offer)
         withAnimation(.spring(response: 0.6, dampingFraction: 0.8)) {
             isFlipped = true
         }
@@ -178,7 +203,7 @@ struct MatchScreen: View {
 
     private func handlePass(_ offer: ConsumerOffer) {
         UIImpactFeedbackGenerator(style: .light).impactOccurred()
-        SignalTracker.recordPass(offerId: offer.id, category: offer.category, behavior: &behavior)
+        SignalTracker.recordPass(offer: offer, behavior: &behavior)
         dismissedIds.insert(offer.id)
         if forcedOfferId == offer.id { forcedOfferId = nil }
         isFlipped = false
@@ -186,13 +211,13 @@ struct MatchScreen: View {
 
     private func handleRemind(_ offer: ConsumerOffer) {
         UIImpactFeedbackGenerator(style: .medium).impactOccurred()
-        SignalTracker.recordRemind(offerId: offer.id, category: offer.category)
+        SignalTracker.recordRemind(offer: offer)
         showToast("Remind me later. Got it.")
     }
 
     private func selectPeek(_ offer: ConsumerOffer) {
         UIImpactFeedbackGenerator(style: .light).impactOccurred()
-        print("[WIN SIGNAL] peek_selected offer=\(offer.id) category=\(offer.category.rawValue)")
+        SignalTracker.recordPeekSelected(offer: offer)
         withAnimation(.spring(response: 0.5, dampingFraction: 0.85)) {
             dismissedIds.remove(offer.id)
             forcedOfferId = offer.id
@@ -207,6 +232,7 @@ struct MatchScreen: View {
         withAnimation(.spring(response: 0.5, dampingFraction: 0.85)) {
             dismissedIds.removeAll()
             behavior.suppressedCategories.removeAll()
+            behavior.passSignals.removeAll()
             forcedOfferId = nil
             isFlipped = false
         }

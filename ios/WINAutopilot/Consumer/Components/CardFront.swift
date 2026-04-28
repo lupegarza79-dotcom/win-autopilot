@@ -21,6 +21,8 @@ struct CardFront: View {
             )
 
             VStack(alignment: .leading, spacing: 14) {
+                DealHeroImage(offer: offer, height: 170)
+
                 HStack(spacing: 6) {
                     Circle().fill(ConsumerColors.greenNeon).frame(width: 6, height: 6)
                     Text("WIN PICKED THIS FOR YOU")
@@ -32,8 +34,6 @@ struct CardFront: View {
                 .padding(.vertical, 6)
                 .background(Capsule().fill(ConsumerColors.green.opacity(0.12)))
                 .overlay(Capsule().strokeBorder(ConsumerColors.green.opacity(0.35), lineWidth: 1))
-
-                DealHeroImage(offer: offer, height: 168)
 
                 HStack(spacing: 8) {
                     Text(offer.businessName)
@@ -53,7 +53,8 @@ struct CardFront: View {
                     .font(.system(size: 36, weight: .heavy))
                     .foregroundStyle(ConsumerColors.textLight)
                     .lineLimit(2)
-                    .minimumScaleFactor(0.7)
+                    .minimumScaleFactor(0.75)
+                    .padding(.horizontal, 2)
 
                 SpotsBar(spotsLeft: offer.spotsLeft, spotsTotal: offer.spotsTotal)
 
@@ -67,36 +68,41 @@ struct CardFront: View {
                     }
                     Spacer()
                     HStack(spacing: 4) {
+                        Circle()
+                            .fill(ConsumerColors.greenNeon)
+                            .frame(width: 4, height: 4)
                         Text("\(offer.matchScore)% match")
-                            .font(.system(size: 11, weight: .heavy))
+                            .font(.system(size: 10, weight: .heavy))
                             .foregroundStyle(ConsumerColors.greenNeon)
                     }
                     .padding(.horizontal, 8)
                     .padding(.vertical, 4)
-                    .background(Capsule().fill(ConsumerColors.green.opacity(0.14)))
-                    .overlay(Capsule().strokeBorder(ConsumerColors.green.opacity(0.35), lineWidth: 1))
+                    .background(Capsule().fill(ConsumerColors.green.opacity(0.12)))
+                    .overlay(Capsule().strokeBorder(ConsumerColors.green.opacity(0.3), lineWidth: 1))
                 }
 
-                VStack(alignment: .leading, spacing: 6) {
-                    HStack(spacing: 6) {
-                        Image(systemName: "sparkles")
-                            .font(.system(size: 10, weight: .bold))
-                            .foregroundStyle(ConsumerColors.aiBlue)
+                HStack(spacing: 10) {
+                    Image(systemName: "sparkles")
+                        .font(.system(size: 13, weight: .bold))
+                        .foregroundStyle(ConsumerColors.aiBlue)
+
+                    VStack(alignment: .leading, spacing: 2) {
                         Text("WHY THIS MATCHED")
-                            .font(.system(size: 9, weight: .heavy))
-                            .tracking(1.3)
+                            .font(.system(size: 8, weight: .heavy))
+                            .tracking(0.8)
                             .foregroundStyle(ConsumerColors.aiBlue)
+                        Text(offer.matchReason)
+                            .font(.system(size: 13, weight: .semibold))
+                            .foregroundStyle(ConsumerColors.textLight)
+                            .lineLimit(2)
                     }
-                    Text(offer.matchReason)
-                        .font(.system(size: 14, weight: .semibold))
-                        .foregroundStyle(ConsumerColors.textLight)
-                        .lineLimit(2)
                 }
-                .padding(.horizontal, 12)
-                .padding(.vertical, 10)
+                .padding(.horizontal, 14)
+                .padding(.vertical, 11)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .background(RoundedRectangle(cornerRadius: 12).fill(ConsumerColors.aiBlueSoft))
                 .overlay(RoundedRectangle(cornerRadius: 12).strokeBorder(ConsumerColors.aiBlueBorder, lineWidth: 1))
+                .padding(.bottom, 2)
             }
             .padding(18)
         }

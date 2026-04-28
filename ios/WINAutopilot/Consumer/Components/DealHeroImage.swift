@@ -4,27 +4,34 @@ struct DealHeroImage: View {
     let offer: ConsumerOffer
     var height: CGFloat = 160
 
-    private func hex(_ s: String) -> Color {
-        var v: UInt64 = 0
-        Scanner(string: s.replacingOccurrences(of: "#", with: "")).scanHexInt64(&v)
-        let r = Double((v >> 16) & 0xff) / 255
-        let g = Double((v >> 8) & 0xff) / 255
-        let b = Double(v & 0xff) / 255
-        return Color(red: r, green: g, blue: b)
-    }
-
     private var fallback: some View {
         ZStack {
-            LinearGradient(
-                colors: [hex(offer.gradientStart), hex(offer.gradientEnd)],
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            )
+            categoryGradient(for: offer.category)
             Image(systemName: offer.category.symbolName)
                 .font(.system(size: 44, weight: .bold))
                 .foregroundStyle(.white.opacity(0.35))
         }
     }
+
+    private func categoryGradient(for category: ConsumerCategory) -> LinearGradient {
+        switch category {
+        case .tacos:
+            LinearGradient(colors: [Color(red: 0.22, green: 0.36, blue: 0.16), Color(red: 0.12, green: 0.24, blue: 0.11)], startPoint: .topLeading, endPoint: .bottomTrailing)
+        case .coffee:
+            LinearGradient(colors: [Color(red: 0.35, green: 0.22, blue: 0.10), Color(red: 0.20, green: 0.12, blue: 0.06)], startPoint: .topLeading, endPoint: .bottomTrailing)
+        case .gas:
+            LinearGradient(colors: [Color(red: 0.10, green: 0.22, blue: 0.38), Color(red: 0.06, green: 0.14, blue: 0.24)], startPoint: .topLeading, endPoint: .bottomTrailing)
+        case .haircut:
+            LinearGradient(colors: [Color(red: 0.24, green: 0.14, blue: 0.36), Color(red: 0.14, green: 0.08, blue: 0.22)], startPoint: .topLeading, endPoint: .bottomTrailing)
+        case .pizza:
+            LinearGradient(colors: [Color(red: 0.38, green: 0.16, blue: 0.10), Color(red: 0.24, green: 0.10, blue: 0.06)], startPoint: .topLeading, endPoint: .bottomTrailing)
+        case .carwash:
+            LinearGradient(colors: [Color(red: 0.10, green: 0.20, blue: 0.36), Color(red: 0.06, green: 0.12, blue: 0.22)], startPoint: .topLeading, endPoint: .bottomTrailing)
+        }
+    }
+
+    // TODO Production:
+    // Cache merchant images and prefetch top 3 candidate offers before showing card to prevent flicker.
 
     var body: some View {
         Color.black.opacity(0.2)
@@ -46,7 +53,7 @@ struct DealHeroImage: View {
             }
             .overlay {
                 LinearGradient(
-                    colors: [Color.black.opacity(0.05), Color.black.opacity(0.65)],
+                    colors: [Color.black.opacity(0.0), Color.black.opacity(0.72)],
                     startPoint: .top,
                     endPoint: .bottom
                 )
@@ -64,8 +71,8 @@ struct DealHeroImage: View {
                 .foregroundStyle(.white)
                 .padding(.horizontal, 10)
                 .padding(.vertical, 6)
-                .background(Capsule().fill(.ultraThinMaterial))
-                .overlay(Capsule().strokeBorder(Color.white.opacity(0.18), lineWidth: 1))
+                .background(RoundedRectangle(cornerRadius: 8).fill(Color.black.opacity(0.50)))
+                .overlay(RoundedRectangle(cornerRadius: 8).strokeBorder(Color.white.opacity(0.18), lineWidth: 1))
                 .padding(12)
             }
     }
