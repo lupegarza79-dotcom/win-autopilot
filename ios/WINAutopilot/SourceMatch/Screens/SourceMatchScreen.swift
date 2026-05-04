@@ -37,9 +37,7 @@ struct SourceMatchScreen: View {
                     actionRow(for: item)
                         .padding(.horizontal, 16)
 
-                    Text("Tap card for details")
-                        .font(.system(size: 11, weight: .semibold))
-                        .foregroundStyle(SourceColors.textMuted)
+
                 } else {
                     emptyState
                 }
@@ -85,12 +83,11 @@ struct SourceMatchScreen: View {
                     Image(systemName: "bolt.fill")
                         .font(.system(size: 11, weight: .heavy))
                         .foregroundStyle(SourceColors.aiBlue)
-                    Text("WIN SOURCE")
-                        .font(.system(size: 14, weight: .heavy))
-                        .tracking(1.5)
+                    Text("WIN found this for you")
+                        .font(.system(size: 13, weight: .heavy))
                         .foregroundStyle(SourceColors.textPrimary)
                 }
-                Text("Real-life matches, ready to act.")
+                Text("Tap Interested — SOURCE handles the rest.")
                     .font(.system(size: 10, weight: .medium))
                     .foregroundStyle(SourceColors.textMuted)
             }

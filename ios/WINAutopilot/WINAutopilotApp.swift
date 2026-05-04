@@ -19,7 +19,7 @@ struct WINAutopilotApp: App {
                     } label: {
                         HStack(spacing: 6) {
                             Image(systemName: "bolt.fill")
-                            Text("SOURCE")
+                            Text("Try SOURCE")
                         }
                         .font(.system(size: 11, weight: .heavy))
                         .foregroundStyle(.white)
@@ -37,16 +37,12 @@ struct WINAutopilotApp: App {
                     Button {
                         showGhost = true
                     } label: {
-                        HStack(spacing: 6) {
-                            Image(systemName: "storefront.fill")
-                            Text("Merchant")
-                        }
-                        .font(.system(size: 11, weight: .heavy))
-                        .foregroundStyle(.white)
-                        .padding(.horizontal, 10)
-                        .padding(.vertical, 6)
-                        .background(Color.black.opacity(0.55))
-                        .clipShape(Capsule())
+                        Image(systemName: "storefront.fill")
+                            .font(.system(size: 11, weight: .heavy))
+                            .foregroundStyle(.white.opacity(0.85))
+                            .padding(8)
+                            .background(Color.black.opacity(0.45))
+                            .clipShape(Circle())
                     }
                 }
                 .padding(.top, 8)

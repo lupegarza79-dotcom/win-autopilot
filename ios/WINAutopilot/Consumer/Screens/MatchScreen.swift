@@ -38,9 +38,6 @@ struct MatchScreen: View {
                 AIContextLine(text: contextLine, isScanning: topMatch == nil)
                     .padding(.horizontal, 16)
 
-                savingsMemoryLine
-                    .padding(.horizontal, 20)
-
                 ZStack {
                     if let offer = topMatch {
                         DealCard(offer: offer, isFlipped: $isFlipped, dragOffset: dragOffset)
@@ -139,18 +136,6 @@ struct MatchScreen: View {
             AlertsScreen(alerts: MockUser.alerts)
                 .presentationDetents([.large])
                 .presentationDragIndicator(.visible)
-        }
-    }
-
-    private var savingsMemoryLine: some View {
-        HStack(spacing: 6) {
-            Image(systemName: "sparkles")
-                .font(.system(size: 10, weight: .bold))
-                .foregroundStyle(ConsumerColors.aiBlue)
-            Text("WIN has helped you save about $\(Int(behavior.estimatedSavings)).")
-                .font(.system(size: 11, weight: .medium))
-                .foregroundStyle(ConsumerColors.textMuted)
-            Spacer(minLength: 0)
         }
     }
 

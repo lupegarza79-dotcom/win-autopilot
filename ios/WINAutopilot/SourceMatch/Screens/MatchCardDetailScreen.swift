@@ -106,18 +106,12 @@ struct MatchCardDetailScreen: View {
                         }
                     }
 
-                    // Autopilot preview
-                    section(title: "WHAT SOURCE WILL DO", iconColor: SourceColors.aiBlue, icon: "bolt.fill") {
-                        AutopilotStatusView(
-                            steps: [
-                                .init(label: "Capture your intent"),
-                                .init(label: "Prepare Intent Packet"),
-                                .init(label: "Attach REAiL trust checks"),
-                                .init(label: "Send to provider"),
-                                .init(label: "Ask provider to confirm"),
-                            ],
-                            activeIndex: 0
-                        )
+                    // Autopilot preview — kept simple
+                    section(title: "WHAT HAPPENS NEXT", iconColor: SourceColors.aiBlue, icon: "bolt.fill") {
+                        Text("Tap Interested. SOURCE prepares your request and the provider confirms within 15 minutes.")
+                            .font(.system(size: 13, weight: .semibold))
+                            .foregroundStyle(SourceColors.textPrimary)
+                            .fixedSize(horizontal: false, vertical: true)
                     }
 
                     Spacer(minLength: 80)
@@ -147,8 +141,8 @@ struct MatchCardDetailScreen: View {
                         onInterested(item)
                     } label: {
                         HStack(spacing: 8) {
-                            Image(systemName: "hand.raised.fill")
-                            Text("I'm Interested")
+                            Image(systemName: "bolt.fill")
+                            Text("I'm Interested — Let SOURCE prepare this")
                         }
                         .font(.system(size: 16, weight: .heavy))
                         .foregroundStyle(.black)

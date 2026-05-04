@@ -21,18 +21,6 @@ struct CardFront: View {
             )
 
             VStack(alignment: .leading, spacing: 14) {
-                HStack(spacing: 6) {
-                    Circle().fill(ConsumerColors.greenNeon).frame(width: 6, height: 6)
-                    Text("WIN PICKED THIS FOR YOU")
-                        .font(.system(size: 10, weight: .heavy))
-                        .tracking(1.4)
-                        .foregroundStyle(ConsumerColors.greenNeon)
-                }
-                .padding(.horizontal, 10)
-                .padding(.vertical, 6)
-                .background(Capsule().fill(ConsumerColors.green.opacity(0.12)))
-                .overlay(Capsule().strokeBorder(ConsumerColors.green.opacity(0.35), lineWidth: 1))
-
                 DealHeroImage(offer: offer, height: 168)
 
                 HStack(spacing: 8) {
