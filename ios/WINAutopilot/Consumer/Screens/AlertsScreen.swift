@@ -3,6 +3,8 @@ import SwiftUI
 struct AlertsScreen: View {
     @Environment(\.dismiss) private var dismiss
     let alerts: [ConsumerAlert]
+    @State private var showPilotSheet = false
+    @State private var pilotSubmitted = false
 
     var body: some View {
         ZStack(alignment: .topTrailing) {
@@ -51,6 +53,9 @@ struct AlertsScreen: View {
                     }
                     .padding(.top, 2)
 
+                    pilotCTA
+                        .padding(.top, 8)
+
                     Spacer(minLength: 24)
                 }
                 .padding(.horizontal, 20)
@@ -89,6 +94,60 @@ struct AlertsScreen: View {
             .padding(.vertical, 4)
             .background(Capsule().fill(bg))
             .overlay(Capsule().strokeBorder(border, lineWidth: 1))
+    }
+
+    private var pilotCTA: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack(spacing: 6) {
+                Image(systemName: "storefront.fill")
+                    .font(.system(size: 11, weight: .heavy))
+                    .foregroundStyle(ConsumerColors.retailBlue)
+                Text("FOR MERCHANTS")
+                    .font(.system(size: 9, weight: .heavy))
+                    .tracking(1.2)
+                    .foregroundStyle(ConsumerColors.retailBlue)
+            }
+
+            Text("WIN helps fill slow hours.")
+                .font(.system(size: 18, weight: .heavy))
+                .foregroundStyle(ConsumerColors.textDark)
+
+            Text("You only pay when a customer is generated. No setup fees. No monthly cost.")
+                .font(.system(size: 13))
+                .foregroundStyle(ConsumerColors.textMid)
+                .fixedSize(horizontal: false, vertical: true)
+
+            Button {
+                showPilotSheet = true
+            } label: {
+                HStack(spacing: 6) {
+                    Image(systemName: "bolt.fill")
+                        .font(.system(size: 12, weight: .heavy))
+                    Text("Join Pilot")
+                        .font(.system(size: 14, weight: .heavy))
+                }
+                .foregroundStyle(.white)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 12)
+                .background(
+                    LinearGradient(
+                        colors: [ConsumerColors.retailBlue, ConsumerColors.retailBlue.opacity(0.85)],
+                        startPoint: .topLeading, endPoint: .bottomTrailing
+                    )
+                )
+                .clipShape(RoundedRectangle(cornerRadius: 12))
+            }
+            .buttonStyle(PressScaleStyle())
+        }
+        .padding(16)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(RoundedRectangle(cornerRadius: 16).fill(ConsumerColors.retailBlueSoft))
+        .overlay(RoundedRectangle(cornerRadius: 16).strokeBorder(ConsumerColors.retailBlueBorder, lineWidth: 1))
+        .sheet(isPresented: $showPilotSheet) {
+            PilotConfirmSheet(submitted: $pilotSubmitted)
+                .presentationDetents([.medium])
+                .presentationDragIndicator(.visible)
+        }
     }
 
     private func knowsRow(category: ConsumerCategory, text: String) -> some View {

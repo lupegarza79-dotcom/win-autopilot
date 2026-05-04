@@ -148,6 +148,14 @@ struct MatchScreen: View {
                 Text("WIN")
                     .font(.system(size: 22, weight: .heavy))
                     .foregroundStyle(ConsumerColors.textDark)
+                Text("DEMO")
+                    .font(.system(size: 9, weight: .heavy))
+                    .tracking(1.0)
+                    .foregroundStyle(ConsumerColors.amber)
+                    .padding(.horizontal, 6)
+                    .padding(.vertical, 3)
+                    .background(Capsule().fill(ConsumerColors.amberSoft))
+                    .overlay(Capsule().strokeBorder(ConsumerColors.amber.opacity(0.3), lineWidth: 1))
             }
             Spacer()
             Button {
