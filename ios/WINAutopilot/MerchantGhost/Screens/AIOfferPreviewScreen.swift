@@ -3,6 +3,8 @@ import SwiftUI
 struct AIOfferPreviewScreen: View {
     @Bindable var store: GhostStore
     let onToast: (String) -> Void
+    @State private var showPilotSheet = false
+    @State private var pilotSubmitted = false
 
     var body: some View {
         ScrollView {
@@ -43,6 +45,9 @@ struct AIOfferPreviewScreen: View {
                     .padding(.horizontal, ConsumerSpacing.screen)
                 }
 
+                pilotCTA
+                    .padding(.horizontal, ConsumerSpacing.screen)
+
                 if !store.sentOfferIds.isEmpty {
                     GhostCard {
                         HStack(spacing: 10) {
@@ -66,6 +71,59 @@ struct AIOfferPreviewScreen: View {
         }
         .background(ConsumerColors.bgWarm)
         .navigationBarTitleDisplayMode(.inline)
+        .sheet(isPresented: $showPilotSheet) {
+            PilotConfirmSheet(submitted: $pilotSubmitted)
+        }
+    }
+
+    private var pilotCTA: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack(spacing: 6) {
+                Image(systemName: "bolt.fill")
+                    .font(.system(size: 11, weight: .heavy))
+                    .foregroundStyle(ConsumerColors.retailBlue)
+                Text("PILOT PROGRAM")
+                    .font(.system(size: 9, weight: .heavy))
+                    .tracking(1.2)
+                    .foregroundStyle(ConsumerColors.retailBlue)
+            }
+            .padding(.horizontal, 8)
+            .padding(.vertical, 5)
+            .background(Capsule().fill(ConsumerColors.retailBlueSoft))
+
+            Text("WIN helps fill slow hours. You only pay when a real customer is generated.")
+                .font(.system(size: 14, weight: .semibold))
+                .foregroundStyle(ConsumerColors.textDark)
+                .fixedSize(horizontal: false, vertical: true)
+
+            Button {
+                showPilotSheet = true
+            } label: {
+                HStack(spacing: 8) {
+                    Image(systemName: pilotSubmitted ? "checkmark.circle.fill" : "sparkles")
+                    Text(pilotSubmitted ? "Pilot request captured" : "Join Pilot")
+                }
+                .font(.system(size: 15, weight: .heavy))
+                .foregroundStyle(.white)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 14)
+                .background(
+                    LinearGradient(
+                        colors: [ConsumerColors.retailBlue, ConsumerColors.retailBlue.opacity(0.85)],
+                        startPoint: .topLeading, endPoint: .bottomTrailing
+                    )
+                )
+                .clipShape(RoundedRectangle(cornerRadius: 14))
+            }
+        }
+        .padding(16)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(ConsumerColors.bgCard)
+        .clipShape(.rect(cornerRadius: ConsumerSpacing.radius))
+        .overlay(
+            RoundedRectangle(cornerRadius: ConsumerSpacing.radius)
+                .strokeBorder(ConsumerColors.retailBlueBorder, lineWidth: 1)
+        )
     }
 }
 

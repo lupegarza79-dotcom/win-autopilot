@@ -5,8 +5,12 @@ struct PilotConfirmSheet: View {
     @Environment(\.dismiss) private var dismiss
     @Binding var submitted: Bool
     @State private var businessName: String = ""
-    @State private var contact: String = ""
+    @State private var ownerName: String = ""
+    @State private var phone: String = ""
+    @State private var slowHours: String = ""
+    @State private var offerIdea: String = ""
     @State private var didSubmit = false
+    @State private var copyConfirmed = false
 
     var body: some View {
         ZStack {
@@ -15,13 +19,15 @@ struct PilotConfirmSheet: View {
             if didSubmit {
                 successView
             } else {
-                formView
+                ScrollView {
+                    formView
+                }
             }
         }
     }
 
     private var formView: some View {
-        VStack(alignment: .leading, spacing: 16) {
+        VStack(alignment: .leading, spacing: 14) {
             HStack(spacing: 6) {
                 Image(systemName: "bolt.fill")
                     .font(.system(size: 11, weight: .heavy))
@@ -39,26 +45,21 @@ struct PilotConfirmSheet: View {
                 .font(.system(size: 26, weight: .heavy))
                 .foregroundStyle(ConsumerColors.textDark)
 
-            Text("WIN fills your slow hours with real customers. You only pay when a customer is generated.")
+            Text("WIN helps fill slow hours. You only pay when a real customer is generated.")
                 .font(.system(size: 14))
                 .foregroundStyle(ConsumerColors.textMid)
                 .fixedSize(horizontal: false, vertical: true)
 
             VStack(spacing: 10) {
                 inputField(title: "Business name", text: $businessName, placeholder: "Don Pepe Tacos")
-                inputField(title: "Phone or email", text: $contact, placeholder: "owner@example.com")
+                inputField(title: "Owner name", text: $ownerName, placeholder: "Maria Lopez")
+                inputField(title: "Phone", text: $phone, placeholder: "(956) 555-0123", keyboard: .phonePad)
+                inputField(title: "Best slow hours", text: $slowHours, placeholder: "Tue 2-4 PM, Sun 8-9 PM")
+                inputField(title: "Offer idea", text: $offerIdea, placeholder: "2x1 tacos, free drink with combo…")
             }
             .padding(.top, 4)
 
-            Spacer()
-
-            Button {
-                UIImpactFeedbackGenerator(style: .medium).impactOccurred()
-                withAnimation(.spring(response: 0.4, dampingFraction: 0.85)) {
-                    didSubmit = true
-                    submitted = true
-                }
-            } label: {
+            Button(action: submit) {
                 Text("Submit pilot request")
                     .font(.system(size: 15, weight: .heavy))
                     .foregroundStyle(.white)
@@ -75,14 +76,41 @@ struct PilotConfirmSheet: View {
             }
             .disabled(!canSubmit)
 
-            Text("Demo only. No real submission is sent.")
+            HStack(spacing: 10) {
+                Button(action: copyPilotInfo) {
+                    HStack(spacing: 6) {
+                        Image(systemName: copyConfirmed ? "checkmark" : "doc.on.doc")
+                        Text(copyConfirmed ? "Copied" : "Copy Pilot Info")
+                    }
+                    .font(.system(size: 13, weight: .heavy))
+                    .foregroundStyle(ConsumerColors.textDark)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 12)
+                    .background(RoundedRectangle(cornerRadius: 12).fill(ConsumerColors.bgCard))
+                    .overlay(RoundedRectangle(cornerRadius: 12).strokeBorder(ConsumerColors.borderLight, lineWidth: 1))
+                }
+
+                Button(action: textPilotInfo) {
+                    HStack(spacing: 6) {
+                        Image(systemName: "message.fill")
+                        Text("Text Pilot Info")
+                    }
+                    .font(.system(size: 13, weight: .heavy))
+                    .foregroundStyle(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 12)
+                    .background(RoundedRectangle(cornerRadius: 12).fill(ConsumerColors.green))
+                }
+            }
+
+            Text("Demo only. Info stays on this device until you copy or text it.")
                 .font(.system(size: 11))
                 .foregroundStyle(ConsumerColors.textMuted)
                 .frame(maxWidth: .infinity, alignment: .center)
         }
         .padding(.horizontal, 22)
         .padding(.top, 28)
-        .padding(.bottom, 18)
+        .padding(.bottom, 22)
     }
 
     private var successView: some View {
@@ -105,11 +133,37 @@ struct PilotConfirmSheet: View {
                 .multilineTextAlignment(.center)
                 .padding(.horizontal, 24)
 
+            VStack(spacing: 10) {
+                Button(action: copyPilotInfo) {
+                    HStack(spacing: 6) {
+                        Image(systemName: copyConfirmed ? "checkmark" : "doc.on.doc")
+                        Text(copyConfirmed ? "Copied" : "Copy Pilot Info")
+                    }
+                    .font(.system(size: 14, weight: .heavy))
+                    .foregroundStyle(ConsumerColors.textDark)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 13)
+                    .background(RoundedRectangle(cornerRadius: 12).fill(ConsumerColors.bgCard))
+                    .overlay(RoundedRectangle(cornerRadius: 12).strokeBorder(ConsumerColors.borderLight, lineWidth: 1))
+                }
+
+                Button(action: textPilotInfo) {
+                    HStack(spacing: 6) {
+                        Image(systemName: "message.fill")
+                        Text("Text Pilot Info")
+                    }
+                    .font(.system(size: 14, weight: .heavy))
+                    .foregroundStyle(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 13)
+                    .background(RoundedRectangle(cornerRadius: 12).fill(ConsumerColors.green))
+                }
+            }
+            .padding(.horizontal, 22)
+
             Spacer()
 
-            Button {
-                dismiss()
-            } label: {
+            Button { dismiss() } label: {
                 Text("Done")
                     .font(.system(size: 15, weight: .heavy))
                     .foregroundStyle(ConsumerColors.textDark)
@@ -118,17 +172,71 @@ struct PilotConfirmSheet: View {
                     .background(RoundedRectangle(cornerRadius: 14).fill(ConsumerColors.bgCard))
                     .overlay(RoundedRectangle(cornerRadius: 14).strokeBorder(ConsumerColors.borderLight, lineWidth: 1))
             }
+            .padding(.horizontal, 22)
         }
-        .padding(.horizontal, 22)
         .padding(.bottom, 18)
     }
 
     private var canSubmit: Bool {
         !businessName.trimmingCharacters(in: .whitespaces).isEmpty
-            && !contact.trimmingCharacters(in: .whitespaces).isEmpty
+            && !phone.trimmingCharacters(in: .whitespaces).isEmpty
     }
 
-    private func inputField(title: String, text: Binding<String>, placeholder: String) -> some View {
+    private func submit() {
+        UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+        withAnimation(.spring(response: 0.4, dampingFraction: 0.85)) {
+            didSubmit = true
+            submitted = true
+        }
+    }
+
+    private func pilotInfoText() -> String {
+        let trimmedOffer = offerIdea.trimmingCharacters(in: .whitespaces)
+        let trimmedSlow = slowHours.trimmingCharacters(in: .whitespaces)
+        let trimmedOwner = ownerName.trimmingCharacters(in: .whitespaces)
+        return """
+        WIN Pilot Request
+        Business: \(businessName.isEmpty ? "—" : businessName)
+        Owner: \(trimmedOwner.isEmpty ? "—" : trimmedOwner)
+        Phone: \(phone.isEmpty ? "—" : phone)
+        Slow hours: \(trimmedSlow.isEmpty ? "—" : trimmedSlow)
+        Offer idea: \(trimmedOffer.isEmpty ? "—" : trimmedOffer)
+
+        WIN helps fill slow hours. You only pay when a real customer is generated.
+        """
+    }
+
+    private func copyPilotInfo() {
+        UIPasteboard.general.string = pilotInfoText()
+        UIImpactFeedbackGenerator(style: .light).impactOccurred()
+        withAnimation { copyConfirmed = true }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.6) {
+            withAnimation { copyConfirmed = false }
+        }
+    }
+
+    private func textPilotInfo() {
+        UIImpactFeedbackGenerator(style: .light).impactOccurred()
+        let body = pilotInfoText()
+        let encoded = body.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
+        let digits = phone.filter { $0.isNumber || $0 == "+" }
+        let urlString: String
+        if digits.isEmpty {
+            urlString = "sms:&body=\(encoded)"
+        } else {
+            urlString = "sms:\(digits)&body=\(encoded)"
+        }
+        if let url = URL(string: urlString) {
+            UIApplication.shared.open(url)
+        }
+    }
+
+    private func inputField(
+        title: String,
+        text: Binding<String>,
+        placeholder: String,
+        keyboard: UIKeyboardType = .default
+    ) -> some View {
         VStack(alignment: .leading, spacing: 6) {
             Text(title.uppercased())
                 .font(.system(size: 9, weight: .heavy))
@@ -141,8 +249,9 @@ struct PilotConfirmSheet: View {
                 .padding(.vertical, 12)
                 .background(RoundedRectangle(cornerRadius: 12).fill(ConsumerColors.bgCard))
                 .overlay(RoundedRectangle(cornerRadius: 12).strokeBorder(ConsumerColors.borderLight, lineWidth: 1))
+                .keyboardType(keyboard)
                 .autocorrectionDisabled()
-                .textInputAutocapitalization(.words)
+                .textInputAutocapitalization(keyboard == .phonePad ? .never : .words)
         }
     }
 }
